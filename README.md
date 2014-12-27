@@ -1,10 +1,12 @@
 # RaceTrack Memory Explorations
  
-References:
+### References
+
 1. http://dl.acm.org/citation.cfm?id=2333707
 2. http://dl.acm.org/citation.cfm?id=2627651
 
-Strategy:
+### Strategy
+
 1. 首先，我们使用 SRAM 作为 tag array，RM 作为 data array。
 2. 在同一个 group 中，set 允许以任意顺序摆放，只需要根据 tag array 中的记录访问即可。
 3. 基本参数：
