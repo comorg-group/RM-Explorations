@@ -23,7 +23,7 @@ This project is course project for Peking University Computer Orignization class
 
 We propose a cache structure similar to TapeCache[3]
 
-![Alt text](/res/archtecture.png "TapeCache")
+![Alt text](/res/architecture.png "TapeCache")
 
 * Notably, we uses a hybird array method to mamage cache. We realize the data array using RaceTrack memory and the tag array using SRAM.
 * The SRAM might store additional data enable better schedule flexablility for data array.
