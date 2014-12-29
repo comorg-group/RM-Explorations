@@ -17,6 +17,9 @@ This project is course project for Peking University Computer Orignization class
 * 杨俊睿 Student Number: 1200012860
 * 刘当一 Student Number: 1100011625
 
+
+
+
 ## Design
 
 ### Structure
@@ -33,6 +36,7 @@ We propose a cache structure similar to TapeCache[3]
 ### Strategy
 
 * Static Strategy
+
 	1. "Hybird Port"
 
 		We never need to read and write or write and read a same cell in a row, we believe placing a RW port whose length equals a read and write port combination would be a waste.
@@ -55,23 +59,27 @@ We propose a cache structure similar to TapeCache[3]
 
 		We choose a "Eager" policy: the port always return to an optimal positon after each access. This decision is basis for many other strategy we adopted below.
 
-	1. "Set Reampping"
+	2. "Set Reampping"
 
 		We deploy additional bit in tag array to store the address accross the same group. Thus, a cache line in a set can be remapped to anywhere in the group while maintain same time for tag comparasion.
 
-	2. "Lazy Evict"
+	3. "Lazy Evict"
 
 		When a cache miss is generated, we will immediately return the data from the main memory to CPU without evict the corrispond cell. The COU will preform the evict action then.
 
-	3. "Idle Defragment"
+	4. "Idle Defragment"
 
 		We discovered that cell around the position of read port can be accessed faster. Thus, we want the more likely-to-be-accessed cache line be placed near the read port. Fortunately, the history data stored for evict decision can also be used to decide optimal position for each cache line in cell.
 
 		"Idle Defragment" is a action performed during idle period to maintain the most optimal placement (most used cell ) for each cell. Also, It must be able to be interrupted smoothly when CPU access a data in the group being defragmenting.
 
-	4. ("Shift Predictor")
+	5. ("Shift Predictor")
 
 		We can maintain a "Shift Prediction Table" for each cell in group, recording next access position to the same group. This strategy is conflict with most strategies mentioned above and might not be adopted.
+
+	6. "Dual Channel"
+
+		We observe that each access may come with one swap to maintain the order. Swap between two group cost significantly less than swap in one group. Thus, we futher add one bit to address bits in tag array to enable each set to be placed across two group.
 
 ## References
 
