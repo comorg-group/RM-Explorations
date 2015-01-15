@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>01444C56-500A-4746-9C04-53E4C56A1768</string>
+	<key>IDESourceControlProjectName</key>
+	<string>simulator</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>9404BB379B9CB571B0A0A24E436026EE0F0C0456</key>
+		<string>https://github.com/liudangyi/RM-Explorations.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>simulator/simulator.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>9404BB379B9CB571B0A0A24E436026EE0F0C0456</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/liudangyi/RM-Explorations.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>9404BB379B9CB571B0A0A24E436026EE0F0C0456</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>9404BB379B9CB571B0A0A24E436026EE0F0C0456</string>
+			<key>IDESourceControlWCCName</key>
+			<string>RM-Explorations</string>
+		</dict>
+	</array>
+</dict>
+</plist>
