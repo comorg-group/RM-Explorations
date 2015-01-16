@@ -17,6 +17,7 @@ struct Request {
     Operation op;
     uint64_t id;
     Addr address;
+    Tick tick;
 };
 
 inline void cacheDesignError(std::string string){

@@ -32,6 +32,7 @@
 /trace
 /simulator/simulator.build
 /simulator/simulator.xcodeproj
+/simulator/simulator
 
 # Cmake files
 CMakeCache.txt
