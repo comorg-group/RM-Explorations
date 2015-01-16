@@ -26,7 +26,7 @@ void BaselineCache::nextTick(Tick tick)
     switch (state) {
     case StateIdle:
         break;
-    case StateMoving:
+    case StateMoving: {
         if (targetOp == OpRead) {
             HeadDirection dir = strip[targetStrip]->readDir(targetAddr);
             strip[targetStrip]->shift(dir);
@@ -42,7 +42,8 @@ void BaselineCache::nextTick(Tick tick)
             }
         }
         break;
-    case StateReading:
+    }
+    case StateReading: {
         if (targetOp == OpRead) {
             strip[targetStrip]->readDir(targetAddr);
             smu[targetStrip][targetGroup][targetGroupOffset].lastAccessTick = tick;
@@ -57,7 +58,8 @@ void BaselineCache::nextTick(Tick tick)
         }
         state = StateIdle;
         break;
-    case StateLookup:
+    }
+    case StateLookup: {
         SMUEntry hitEntry;
         int groupOffset;
         hitEntry.valid = false;
@@ -94,7 +96,8 @@ void BaselineCache::nextTick(Tick tick)
             state = StateMiss;
         }
         break;
-    case StateMiss:
+    }
+    case StateMiss: {
         if (!missCounter) {
             missCounter--;
             state = StateMiss;
@@ -117,6 +120,7 @@ void BaselineCache::nextTick(Tick tick)
             state = StateIdle;
         }
         break;
+    }
     default:
         cacheDesignError("State not implemented!");
         break;

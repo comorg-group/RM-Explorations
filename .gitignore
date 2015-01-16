@@ -30,6 +30,8 @@
 # Project Files
 /simulator/.idea/workspace.xml
 /trace
+/simulator/simulator.build
+/simulator/simulator.xcodeproj
 
 # Cmake files
 CMakeCache.txt
