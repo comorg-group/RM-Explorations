@@ -11,6 +11,7 @@ int main(int argc, char** argv)
 {
     fstream fs;
     fs.open(argv[1]);
+    cout << argv[1] << endl;
     if (!fs.is_open())
         return -1;
 
@@ -25,7 +26,7 @@ int main(int argc, char** argv)
 
         fs >> op >> address >> useless >> useless >> tick;
         Operation operation = (op == "r") ? OpRead : ((op == "w") ? OpWrite : OpUpdate);
-        request_queue.push({ operation, total_request, address, tick });
+        request_queue.push({ operation, total_request, address, tick / 100 });
     }
 
     printf("aaa\n");

@@ -10,6 +10,7 @@ public:
     BaseCache(callback_type callback) : callback(callback) {}
     virtual void nextTick(Tick) = 0;
     virtual void requestCache(Request) = 0;
+    virtual bool isAvailable() = 0;
 protected:
     callback_type callback;
     static const Tick missPenalty = 100;

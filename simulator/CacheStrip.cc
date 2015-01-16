@@ -50,7 +50,7 @@ HeadDirection CacheStrip::writeDir(int64_t addr)
 HeadDirection CacheStrip::readDir(int64_t addr)
 {
     Head nearestReadHead;
-    int64_t distance = UINT64_MAX;
+    int64_t distance = INT64_MAX;
     for (Head readHead : readHeads) {
         if (abs(readHead + offset - addr) < distance) {
             distance = abs(readHead + offset - addr);

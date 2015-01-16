@@ -29,6 +29,7 @@ private:
         StateReading,
         StateLookup,
         StateMiss,
+        StateWriting,
     } State;
     State state;
     Request targetRequest;
@@ -44,7 +45,6 @@ private:
     uint64_t targetGroupOffset;
     
     uint32_t missCounter;
-    bool targetHot;
     Operation targetOp;
     CacheStrip * strip[1<<STRIP_BIT];
     SMUEntry smu[1<<STRIP_BIT][1<<LINE_BIT][GROUPSIZE];
@@ -63,6 +63,7 @@ public:
     }
     virtual void nextTick(Tick tick);
     virtual void requestCache(Request);
+    virtual bool isAvailable();
 };
 
 #endif

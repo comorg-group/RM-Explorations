@@ -38,26 +38,21 @@ void BaselineCache::nextTick(Tick tick)
             HeadDirection dir = strip[targetStrip]->writeDir(targetAddr);
             strip[targetStrip]->shift(dir);
             if (!strip[targetStrip]->writeDir(targetAddr)) {
-                state = StateReading;
+                state = StateWriting;
             }
         }
         break;
     }
     case StateReading: {
-        if (targetOp == OpRead) {
-            strip[targetStrip]->readDir(targetAddr);
-            smu[targetStrip][targetGroup][targetGroupOffset].lastAccessTick = tick;
-            callback(targetRequest);
-            targetHot = false;
-        }
-        else {
-            strip[targetStrip]->writeDir(targetAddr);
-            smu[targetStrip][targetGroup][targetGroupOffset].lastAccessTick = tick;
-            callback(targetRequest);
-            targetHot = false;
-        }
+        strip[targetStrip]->readDir(targetAddr);
+        smu[targetStrip][targetGroup][targetGroupOffset].lastAccessTick = tick;
+        callback(targetRequest);
         state = StateIdle;
         break;
+    }
+    case StateWriting: {
+        strip[targetStrip]->writeDir(targetAddr);
+        smu[targetStrip][targetGroup][targetGroupOffset].lastAccessTick = tick;
     }
     case StateLookup: {
         SMUEntry hitEntry;
@@ -83,8 +78,9 @@ void BaselineCache::nextTick(Tick tick)
                 }
             }
             else {
+                callback(targetRequest);
                 if (!strip[targetStrip]->writeDir(targetAddr)) {
-                    state = StateReading;
+                    state = StateWriting;
                 }
                 else {
                     state = StateMoving;
@@ -115,9 +111,14 @@ void BaselineCache::nextTick(Tick tick)
             }
             SMUEntry newEntry = { tick, targetTag, true };
             smu[targetStrip][targetAddr][groupOffset] = newEntry;
+            targetOp = OpWrite;
             callback(targetRequest);
-            targetHot = false;
-            state = StateIdle;
+            if (!strip[targetStrip]->writeDir(targetAddr)) {
+                state = StateWriting;
+            }
+            else {
+                state = StateMoving;
+            }
         }
         break;
     }
@@ -129,7 +130,7 @@ void BaselineCache::nextTick(Tick tick)
 
 void BaselineCache::requestCache(Request request)
 {
-    if (targetHot) {
+    if (state != StateIdle) {
         cacheDesignError("new request come while cache is still working!!!");
     }
     else {
@@ -138,7 +139,11 @@ void BaselineCache::requestCache(Request request)
         targetGroup = getLineBits(target);
         targetStrip = getStripBits(target);
         targetTag = getTagBits(target);
-        targetHot = 1;
         state = StateLookup;
     }
+}
+
+bool BaselineCache::isAvailable()
+{
+    return (state == StateIdle);
 }
