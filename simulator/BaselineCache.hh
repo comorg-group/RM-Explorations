@@ -21,7 +21,7 @@ struct SMUEntry {
     bool valid;
 };
 
-class BaselineCache : public BaseCache{
+class BaselineCache : public BaseCache {
 private:
     typedef enum : uint8_t {
         StateIdle,

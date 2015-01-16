@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <queue>
 #include "global.hh"
 #include "BaseCache.hh"
 #include "BaselineCache.hh"
@@ -12,29 +13,52 @@ int main(int argc, char** argv)
     fs.open(argv[1]);
     if (!fs.is_open())
         return -1;
-    callback_type callback = [](Request req) {};
-    BaselineCache blCache = BaselineCache(callback);
-    BaseCache& cache = blCache;
-    Tick last_tick = 0;
-    uint64_t request_id = 0;
 
+    uint64_t total_request = 0;
+    queue<Request> request_queue;
     while (!fs.eof()) {
-        request_id++;
+        total_request++;
         string op;
         Addr address;
         int useless;
         Tick tick;
 
         fs >> op >> address >> useless >> useless >> tick;
-
-        if (last_tick == 0)
-            last_tick = tick;
-        for (int i = 0; i < tick - last_tick; i++)
-            cache.nextTick(tick);
         Operation operation = (op == "r") ? OpRead : ((op == "w") ? OpWrite : OpUpdate);
-        Request request = { operation, request_id, address };
-        cache.requestCache(request);
+        request_queue.push({ operation, total_request, address, tick });
     }
+
+    printf("aaa\n");
+
+    if (request_queue.empty()) {
+        return 0;
+    }
+
+    Tick current_tick = request_queue.front().tick;
+    Tick total_delay = 0;
+    bool cache_available = true;
+    auto cache = BaselineCache([&](Request req) {
+        printf("popRequest %lld\n", req.id);
+        cache_available = true;
+        request_queue.pop();
+        total_delay += current_tick - req.tick;
+    });
+
+    while (!request_queue.empty()) {
+        auto current_request = request_queue.front();
+        if (cache_available && current_request.tick + 6 <= current_tick) {
+            printf("requestCache %lld\n", current_request.id);
+            cache_available = false;
+            cache.requestCache(current_request);
+        }
+
+        current_tick++;
+        cache.nextTick(current_tick);
+        if (current_tick % 100000 == 0)
+            printf("current_tick: %lld\n", current_tick);
+    }
+
+    cout << total_delay << endl;
 
     return 0;
 }
