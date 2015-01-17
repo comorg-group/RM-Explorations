@@ -9,9 +9,9 @@
 #define LINE_BIT 3
 #define LINE_MASK 0x00000E00
 #define STRIP_BIT 10
-#define STRIP_MASK 0x3FFF000
-#define TAG_BIT 7
-#define TAG_MASK 0xFC000000
+#define STRIP_MASK 0x3FF000
+#define TAG_BIT 10
+#define TAG_MASK 0xFFC000000
 #define GROUP_BIT 3
 #define GROUPSIZE 8
 
