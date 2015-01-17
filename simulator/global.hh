@@ -7,7 +7,7 @@
 typedef uint64_t Addr;
 typedef uint64_t Tick;
 
-#if 1
+#if 0
 #define debug(...)
 #else
 #define debug(...) do { \
@@ -35,7 +35,7 @@ inline void cacheDesignError(const std::string& string){
 }
 
 inline void cacheDesignNotification(const std::string& string){
-    // debug("%s", string.c_str());
+    debug("%s", string.c_str());
 }
 
 #endif

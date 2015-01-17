@@ -3,22 +3,22 @@
 
 uint64_t getTagBits(Addr addr)
 {
-    return (addr & TAG_MASK) >> __builtin_ffs(TAG_MASK);
+    return (addr & TAG_MASK) >> __builtin_ctz(TAG_MASK);
 }
 
 uint64_t getStripBits(Addr addr)
 {
-    return (addr & STRIP_MASK) >> __builtin_ffs(STRIP_MASK);
+    return (addr & STRIP_MASK) >> __builtin_ctz(STRIP_MASK);
 }
 
 uint64_t getLineBits(Addr addr)
 {
-    return (addr & LINE_MASK) >> __builtin_ffs(LINE_MASK);
+    return (addr & LINE_MASK) >> __builtin_ctz(LINE_MASK);
 }
 
 uint64_t getOffsetBits(Addr addr)
 {
-    return (addr & OFFSET_MASK) >> __builtin_ffs(OFFSET_MASK);
+    return (addr & OFFSET_MASK) >> __builtin_ctz(OFFSET_MASK);
 }
 
 void BaselineCache::nextTick(Tick tick)
