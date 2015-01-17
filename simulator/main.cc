@@ -19,7 +19,6 @@ int main(int argc, char** argv)
     uint64_t total_request = 0;
     queue<Request> request_queue;
     while (!fs.eof()) {
-        total_request++;
         string op;
         Addr address;
         int useless;
@@ -28,6 +27,7 @@ int main(int argc, char** argv)
         fs >> op >> address >> useless >> useless >> tick;
         if (op != "r" && op != "w" && op != "u")
             continue;
+        total_request++;
         Operation operation = (op == "r") ? OpRead : ((op == "w") ? OpWrite : OpUpdate);
         request_queue.push({ operation, total_request, address, tick / 1000 });
     }
@@ -48,7 +48,7 @@ int main(int argc, char** argv)
 
     while (success_request < total_request) {
         if (cache.isAvailable() && !request_queue.empty() && request_queue.front().tick + 6 <= current_tick) {
-            debug("@%lld: Send request: request.id: %lld", current_tick, request_queue.front().id);
+            debug("@%lld: Send request: request.id: %lld / %lld", current_tick, request_queue.front().id, total_request);
             cache.requestCache(request_queue.front());
             request_queue.pop();
         }
