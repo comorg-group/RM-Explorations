@@ -35,6 +35,8 @@
 /simulator/simulator
 
 # Cmake files
+Debug
+CMakeScripts
 CMakeCache.txt
 CMakeFiles
 Makefile
