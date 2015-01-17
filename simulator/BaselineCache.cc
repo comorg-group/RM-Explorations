@@ -95,6 +95,16 @@ void BaselineCache::nextTick(Tick tick)
             if (targetOp == OpWrite) {
                 callback(targetRequest);
             }
+            int groupOffset;
+            Tick oldestTick = 0;
+            for (int i = 0; i < GROUPSIZE; i++) {
+                SMUEntry entry = smu[targetStrip][targetGroup][i];
+                if (!entry.valid || entry.lastAccessTick < oldestTick) {
+                    groupOffset = i;
+                }
+            }
+            targetGroupOffset = groupOffset;
+            targetAddr = (getLineBits(target) << GROUP_BIT) + targetGroupOffset;
             missCounter = missPenalty;
             changeState(StateMiss, tick);
         }
@@ -103,21 +113,11 @@ void BaselineCache::nextTick(Tick tick)
     case StateMiss: {
         if (missCounter) {
             missCounter--;
+            HeadDirection dir = strip[targetStrip]->writeDir(targetAddr);
+            strip[targetStrip]->shift(dir);
             changeState(StateMiss, tick);
         }
         else {
-            SMUEntry oldEntry;
-            int groupOffset;
-            Tick oldestTick = 0;
-            for (int i = 0; i < GROUPSIZE; i++) {
-                SMUEntry entry = smu[targetStrip][targetGroup][i];
-                if (!entry.valid || entry.lastAccessTick < oldestTick) {
-                    oldEntry = entry;
-                    groupOffset = i;
-                }
-            }
-            targetGroupOffset = groupOffset;
-            targetAddr = (getLineBits(target) << GROUP_BIT) + targetGroupOffset;
             if (targetOp == OpRead) {
                 callback(targetRequest);
             }
@@ -143,6 +143,7 @@ void BaselineCache::requestCache(Request request)
         cacheDesignError("new request come while cache is still working!!!");
     }
     else {
+        targetOp = request.op;
         targetRequest = request;
         target = request.address;
         targetGroup = getLineBits(target);
@@ -187,7 +188,7 @@ void BaselineCache::changeState(State _state, Tick tick)
 {
     if (state != _state) {
         char text[1000];
-        sprintf(text, "@%llx:State change from %s to %s", tick, stateToString(state).c_str(), stateToString(_state).c_str());
+        sprintf(text, "@%lld:State change from %s to %s", tick, stateToString(state).c_str(), stateToString(_state).c_str());
         state = _state;
         cacheDesignNotification(text);
     }

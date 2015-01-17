@@ -42,9 +42,7 @@ int main(int argc, char** argv)
     });
 
     while (success_request < total_request) {
-        if (cache.isAvailable() &&
-            !request_queue.empty() &&
-            request_queue.front().tick + 6 <= current_tick) {
+        if (cache.isAvailable() && !request_queue.empty() && request_queue.front().tick + 6 <= current_tick) {
             printf("send request %lld\n", request_queue.front().id);
             cache.requestCache(request_queue.front());
             request_queue.pop();
