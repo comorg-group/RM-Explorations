@@ -92,7 +92,7 @@ void BaselineCache::nextTick(Tick tick)
             }
         }
         else {
-            if (targetOp == OpWrite) {
+            if (targetOp != OpRead) {
                 callback(targetRequest);
             }
             int groupOffset;
