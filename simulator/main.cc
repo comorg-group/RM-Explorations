@@ -9,8 +9,9 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-    fstream fs;
+    fstream fs, verbfile;
     fs.open(argv[1]);
+    verbfile.open("output", ios::out);
     cout << argv[1] << endl;
     if (!fs.is_open())
         return -1;
@@ -25,6 +26,8 @@ int main(int argc, char** argv)
         Tick tick;
 
         fs >> op >> address >> useless >> useless >> tick;
+        if (op != "r" && op != "w" && op != "u")
+            continue;
         Operation operation = (op == "r") ? OpRead : ((op == "w") ? OpWrite : OpUpdate);
         request_queue.push({ operation, total_request, address, tick / 1000 });
     }
@@ -36,25 +39,27 @@ int main(int argc, char** argv)
     Tick total_delay = 0;
     uint64_t success_request = 0;
     auto cache = BaselineCache([&](Request req) {
-        printf("@%lld: Finish request: request.id: %lld\n", current_tick, req.id);
+        debug("@%lld: Finish request: request.id: %lld success_request: %lld", current_tick, req.id, success_request);
         success_request++;
-        total_delay += current_tick - req.tick;
+        auto delay = current_tick - req.tick;
+        verbfile << delay << endl;
+        total_delay += delay;
     });
 
     while (success_request < total_request) {
         if (cache.isAvailable() && !request_queue.empty() && request_queue.front().tick + 6 <= current_tick) {
-            printf("@%lld: Send request: request.id: %lld\n", current_tick, request_queue.front().id);
+            debug("@%lld: Send request: request.id: %lld", current_tick, request_queue.front().id);
             cache.requestCache(request_queue.front());
             request_queue.pop();
         }
 
         current_tick++;
         cache.nextTick(current_tick);
-        if (current_tick % 100000 == 0)
-            printf("current_tick: %lld\n", current_tick);
     }
 
-    cout << total_delay << endl;
+    cout << "Total request: " << total_request << endl
+         << "Total delay: " << total_delay << endl
+         << "Average delay: " << total_delay / total_request << endl;
 
     return 0;
 }

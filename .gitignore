@@ -33,6 +33,7 @@
 /simulator/simulator.build
 /simulator/simulator.xcodeproj
 /simulator/simulator
+/simulator/output
 
 # Cmake files
 Debug
