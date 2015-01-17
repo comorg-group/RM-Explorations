@@ -7,7 +7,7 @@
 typedef uint64_t Addr;
 typedef uint64_t Tick;
 
-#if 0
+#if 1
 #define debug(...)
 #else
 #define debug(...) do { \

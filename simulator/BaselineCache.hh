@@ -4,14 +4,14 @@
 #include "BaseCache.hh"
 #include "CacheStrip.hh"
 
-#define OFFSET_BIT 9
-#define OFFSET_MASK 0x000001FF
+#define OFFSET_BIT 6
+#define OFFSET_MASK 0x3F
 #define LINE_BIT 3
-#define LINE_MASK 0x00000E00
+#define LINE_MASK 0x1C0
 #define STRIP_BIT 10
-#define STRIP_MASK 0x3FF000
-#define TAG_BIT 10
-#define TAG_MASK 0xFFC000000
+#define STRIP_MASK 0x7FE00
+#define TAG_BIT 13
+#define TAG_MASK 0xFFF800000
 #define GROUP_BIT 3
 #define GROUPSIZE 8
 
