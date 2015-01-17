@@ -37,14 +37,19 @@ bool CacheStrip::shift(HeadDirection dir)
 HeadDirection CacheStrip::writeDir(int64_t addr)
 {
     Head nearestWriteHead;
-    int64_t distance = UINT64_MAX;
+    int64_t distance = INT64_MAX;
     for (Head writeHead : writeHeads) {
         if (abs(writeHead + offset - addr) < distance) {
             distance = abs(writeHead + offset - addr);
             nearestWriteHead = writeHead;
         }
     }
-    return HeadDirection(-(nearestWriteHead + offset - addr) / abs(nearestWriteHead + offset - addr));
+    if (distance) {
+        return HeadDirection(-(nearestWriteHead + offset - addr) / abs(nearestWriteHead + offset - addr));
+    }
+    else {
+        return STOP;
+    }
 }
 
 HeadDirection CacheStrip::readDir(int64_t addr)

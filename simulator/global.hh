@@ -24,4 +24,8 @@ inline void cacheDesignError(std::string string){
     std::cerr<<"Cache Design Error:" << string <<std::endl;
 }
 
+inline void cacheDesignNotification(std::string string){
+    std::cerr<<"Cache Design Notification:" << string <<std::endl;
+}
+
 #endif

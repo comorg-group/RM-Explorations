@@ -48,6 +48,8 @@ private:
     Operation targetOp;
     CacheStrip * strip[1<<STRIP_BIT];
     SMUEntry smu[1<<STRIP_BIT][1<<LINE_BIT][GROUPSIZE];
+    void changeState(State, Tick);
+    static std::string stateToString(State);
 public:
     BaselineCache(callback_type callback):BaseCache(callback){
         for (int i=0 ; i<(1<<STRIP_BIT); i++) {
