@@ -26,31 +26,28 @@ int main(int argc, char** argv)
 
         fs >> op >> address >> useless >> useless >> tick;
         Operation operation = (op == "r") ? OpRead : ((op == "w") ? OpWrite : OpUpdate);
-        request_queue.push({ operation, total_request, address, tick / 100 });
+        request_queue.push({ operation, total_request, address, tick / 1000 });
     }
 
-    printf("aaa\n");
-
-    if (request_queue.empty()) {
+    if (request_queue.empty())
         return 0;
-    }
 
     Tick current_tick = request_queue.front().tick;
     Tick total_delay = 0;
-    bool cache_available = true;
+    uint64_t success_request = 0;
     auto cache = BaselineCache([&](Request req) {
-        printf("popRequest %lld\n", req.id);
-        cache_available = true;
-        request_queue.pop();
+        printf("finish request %lld\n", req.id);
+        success_request++;
         total_delay += current_tick - req.tick;
     });
 
-    while (!request_queue.empty()) {
-        auto current_request = request_queue.front();
-        if (cache_available && current_request.tick + 6 <= current_tick) {
-            printf("requestCache %lld\n", current_request.id);
-            cache_available = false;
-            cache.requestCache(current_request);
+    while (success_request < total_request) {
+        if (cache.isAvailable() &&
+            !request_queue.empty() &&
+            request_queue.front().tick + 6 <= current_tick) {
+            printf("send request %lld\n", request_queue.front().id);
+            cache.requestCache(request_queue.front());
+            request_queue.pop();
         }
 
         current_tick++;
