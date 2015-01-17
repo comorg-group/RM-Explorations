@@ -36,7 +36,7 @@ int main(int argc, char** argv)
     Tick total_delay = 0;
     uint64_t success_request = 0;
     auto cache = BaselineCache([&](Request req) {
-        printf("finish request %lld\n", req.id);
+        printf("@%lld: Finish request: request.id: %lld\n", current_tick, req.id);
         success_request++;
         total_delay += current_tick - req.tick;
     });
@@ -45,7 +45,7 @@ int main(int argc, char** argv)
         if (cache.isAvailable() &&
             !request_queue.empty() &&
             request_queue.front().tick + 6 <= current_tick) {
-            printf("send request %lld\n", request_queue.front().id);
+            printf("@%lld: Send request: request.id: %lld\n", current_tick, request_queue.front().id);
             cache.requestCache(request_queue.front());
             request_queue.pop();
         }
