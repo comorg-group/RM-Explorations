@@ -85,6 +85,9 @@ int main(int argc, char** argv)
             percent += 2;
         }
 #endif
+        if (req.shiftTime>10) {
+            printf("");
+        }
         auto delay = current_tick - req.tick;
         verbfile << delay << endl;
         total_delay += delay;
