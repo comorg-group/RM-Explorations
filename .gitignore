@@ -30,6 +30,7 @@
 # Project Files
 /simulator/.idea/workspace.xml
 /trace
+/results
 /simulator/simulator.build
 /simulator/simulator.xcodeproj
 /simulator/simulator

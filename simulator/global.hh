@@ -28,6 +28,8 @@ struct Request {
     uint64_t id;
     Addr address;
     Tick tick;
+    Tick shiftTime;
+    bool isMissed;
 };
 
 inline void cacheDesignError(const std::string& string){

@@ -27,6 +27,7 @@ void BaselineCache::nextTick(Tick tick)
     case StateIdle:
         break;
     case StateMoving: {
+        targetRequest.shiftTime++;
         if (targetOp == OpRead) {
             HeadDirection dir = strip[targetStrip]->readDir(targetAddr);
             strip[targetStrip]->shift(dir);
@@ -111,6 +112,7 @@ void BaselineCache::nextTick(Tick tick)
         break;
     }
     case StateMiss: {
+        targetRequest.isMissed = true;
         if (missCounter) {
             missCounter--;
             HeadDirection dir = strip[targetStrip]->writeDir(targetAddr);
@@ -170,16 +172,14 @@ std::string BaselineCache::stateToString(State _state)
     case StateReading:
         return "StateReading";
         break;
+    case StateWriting:
+        return "StateWriting";
+        break;
     case StateLookup:
         return "StateLookup";
         break;
     case StateMiss:
         return "StateMiss";
-        break;
-    case StateWriting:
-        return "StateWriting";
-        break;
-    default:
         break;
     }
 }
