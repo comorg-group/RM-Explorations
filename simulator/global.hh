@@ -9,6 +9,7 @@ typedef uint64_t Tick;
 
 #define STAT
 //#define DEBUG
+
 #ifndef DEBUG
 #define debug(...)
 #else
@@ -18,6 +19,13 @@ typedef uint64_t Tick;
         printf("\033[0m\n"); \
     } while (0)
 #endif
+
+#define error(...) do { \
+        printf("\033[31m[ERROR] %s", __FUNCTION__); \
+        printf(__VA_ARGS__); \
+        printf("\033[0m\n"); \
+        exit(-1); \
+    } while (0)
 
 typedef enum : uint8_t {
     OpRead,
@@ -35,7 +43,7 @@ struct Request {
 };
 
 inline void cacheDesignError(const std::string& string){
-    debug("%s", string.c_str());
+    error("%s", string.c_str());
 }
 
 inline void cacheDesignNotification(const std::string& string){
