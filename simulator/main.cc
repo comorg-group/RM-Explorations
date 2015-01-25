@@ -4,6 +4,7 @@
 #include "global.hh"
 #include "BaseCache.hh"
 #include "BaselineCache.hh"
+#include "EagerCache.hh"
 
 using namespace std;
 
@@ -75,8 +76,7 @@ int main(int argc, char** argv)
          << "Average shift (when read): " << (float)total_shift_time / (float)read_count << endl
          << "Miss rate: " << (float)total_miss / (float)total_request << endl
          << "Read percentage: " << (float)read_count / (float)total_request << endl
-         << "Write percentage: " << (float)write_count / (float)total_request << endl
-         ;
+         << "Write percentage: " << (float)write_count / (float)total_request << endl;
 
     return 0;
 }

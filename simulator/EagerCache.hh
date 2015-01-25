@@ -1,5 +1,5 @@
-#ifndef __BASELINE_CACHE_HH__
-#define __BASELINE_CACHE_HH__
+#ifndef __EAGER_CACHE_HH__
+#define __EAGER_CACHE_HH__
 
 #include "BaseCache.hh"
 #include "CacheStrip.hh"
@@ -15,7 +15,7 @@
 #define GROUP_BIT 3
 #define GROUPSIZE 8
 
-class BaselineCache : public BaseCache {
+class EagerCache : public BaseCache {
     struct SMUEntry {
         Tick lastAccessTick;
         uint64_t tag;
@@ -29,6 +29,7 @@ private:
         StateLookup,
         StateMiss,
         StateWriting,
+        StateReturning,
     } State;
     State state;
     Request targetRequest;
@@ -50,13 +51,13 @@ private:
     void changeState(State, Tick);
     static std::string stateToString(State);
     
-    static const int64_t microTickPerTick = 1;
+    static const int64_t microTickPerTick = 2;
     void nextState(Tick);
     int64_t stateLength(State);
 public:
-    BaselineCache(callback_type callback):BaseCache(callback){
+    EagerCache(callback_type callback):BaseCache(callback){
         for (int i=0 ; i<(1<<STRIP_BIT); i++) {
-            strip[i]= new CacheStrip({0,16,32,48}, {0,16,32,48});
+            strip[i]= new CacheStrip({8,24,40,56}, {8,24,40,56});
         }
         for (int i=0; i<(1<<STRIP_BIT); i++) {
             for (int j=0; j<(1<<LINE_BIT); j++) {

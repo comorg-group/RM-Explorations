@@ -1,4 +1,4 @@
-#include "BaselineCache.hh"
+#include "EagerCache.hh"
 #include "strings.h"
 
 inline uint64_t getTagBits(Addr addr)
@@ -21,7 +21,7 @@ inline uint64_t getOffsetBits(Addr addr)
     return (addr & OFFSET_MASK) >> __builtin_ctz(OFFSET_MASK);
 }
 
-void BaselineCache::nextState(Tick tick)
+void EagerCache::nextState(Tick tick)
 {
     switch (state) {
     case StateIdle:
@@ -139,7 +139,7 @@ void BaselineCache::nextState(Tick tick)
     }
 }
 
-int64_t BaselineCache::stateLength(State state)
+int64_t EagerCache::stateLength(State state)
 {
     switch (state) {
     case StateIdle:
@@ -157,7 +157,7 @@ int64_t BaselineCache::stateLength(State state)
     }
 }
 
-void BaselineCache::nextTick(Tick tick)
+void EagerCache::nextTick(Tick tick)
 {
     for (int64_t currentMicroTickLeft = microTickPerTick; currentMicroTickLeft >= stateLength(state);) {
         currentMicroTickLeft -= stateLength(state);
@@ -165,7 +165,7 @@ void BaselineCache::nextTick(Tick tick)
     }
 }
 
-void BaselineCache::requestCache(Request request)
+void EagerCache::requestCache(Request request)
 {
     if (state != StateIdle) {
         cacheDesignError("new request come while cache is still working!!!");
@@ -181,12 +181,12 @@ void BaselineCache::requestCache(Request request)
     }
 }
 
-bool BaselineCache::isAvailable()
+bool EagerCache::isAvailable()
 {
     return (state == StateIdle);
 }
 
-std::string BaselineCache::stateToString(State _state)
+std::string EagerCache::stateToString(State _state)
 {
     switch (_state) {
     case StateIdle:
@@ -210,7 +210,7 @@ std::string BaselineCache::stateToString(State _state)
     }
 }
 
-void BaselineCache::changeState(State _state, Tick tick)
+void EagerCache::changeState(State _state, Tick tick)
 {
     if (state != _state) {
         char text[1000];

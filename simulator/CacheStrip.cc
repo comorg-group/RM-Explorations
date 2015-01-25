@@ -34,22 +34,22 @@ bool CacheStrip::shift(HeadDirection dir)
     return true;
 }
 
+HeadDirection CacheStrip::toDir(int64_t addr)
+{
+    return HeadDirection(sgn(addr - offset));
+}
+
 HeadDirection CacheStrip::writeDir(int64_t addr)
 {
     Head nearestWriteHead;
     int64_t distance = INT64_MAX;
     for (Head writeHead : writeHeads) {
-        if (abs(writeHead + offset - addr) < distance) {
-            distance = abs(writeHead + offset - addr);
+        if (llabs(writeHead + offset - addr) < llabs(distance)) {
+            distance = (writeHead + offset - addr);
             nearestWriteHead = writeHead;
         }
     }
-    if (distance) {
-        return HeadDirection(-(nearestWriteHead + offset - addr) / abs(nearestWriteHead + offset - addr));
-    }
-    else {
-        return STOP;
-    }
+    return HeadDirection(sgn(-distance));
 }
 
 HeadDirection CacheStrip::readDir(int64_t addr)
@@ -57,15 +57,10 @@ HeadDirection CacheStrip::readDir(int64_t addr)
     Head nearestReadHead;
     int64_t distance = INT64_MAX;
     for (Head readHead : readHeads) {
-        if (abs(readHead + offset - addr) < distance) {
-            distance = abs(readHead + offset - addr);
+        if (llabs(readHead + offset - addr) < llabs(distance)) {
+            distance = (readHead + offset - addr);
             nearestReadHead = readHead;
         }
     }
-    if (distance) {
-        return HeadDirection(-(nearestReadHead + offset - addr) / abs(nearestReadHead + offset - addr));
-    }
-    else {
-        return STOP;
-    }
+    return HeadDirection(sgn(-distance));
 }

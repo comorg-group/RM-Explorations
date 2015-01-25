@@ -40,4 +40,8 @@ inline void cacheDesignNotification(const std::string& string){
     debug("%s", string.c_str());
 }
 
+template <typename T> int64_t sgn(T val) {
+    return (T(0) < val) - (val < T(0));
+}
+
 #endif

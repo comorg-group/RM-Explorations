@@ -24,6 +24,7 @@ public:
     bool shift(HeadDirection);
     virtual HeadDirection writeDir(int64_t);
     virtual HeadDirection readDir(int64_t);
+    HeadDirection toDir(int64_t);
 };
 
 #endif
