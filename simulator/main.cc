@@ -49,17 +49,16 @@ int main(int argc, char** argv)
     if (analysis) {
         uint64_t total_interval = 0;
         map<Addr, int> address_visit_count;
-        for (auto it = request_vector.begin(); it != request_vector.end()-1; it++) {
-            total_interval += (it+1)->tick - it->tick;
+        for (auto it = request_vector.begin(); it != request_vector.end() - 1; it++) {
+            total_interval += (it + 1)->tick - it->tick;
             address_visit_count[it->address]++;
         }
 
         cout << "Total request: " << total_request << endl
-             << "Read percentage: " << (float) read_count / (float) total_request * 100 << "%" << endl
-             << "Write percentage: " << (float) write_count / (float) total_request * 100 << "%" << endl
-             << "Average interval: " << (float) total_interval / total_request << endl
-             << "Average requests per address: " << (float) total_request / address_visit_count.size() << endl
-             ;
+             << "Read percentage: " << (float)read_count / (float)total_request * 100 << "%" << endl
+             << "Write percentage: " << (float)write_count / (float)total_request * 100 << "%" << endl
+             << "Average interval: " << (float)total_interval / total_request << endl
+             << "Average requests per address: " << (float)total_request / address_visit_count.size() << endl;
         return 0;
     }
 
@@ -69,9 +68,10 @@ int main(int argc, char** argv)
     uint64_t success_request = 0;
     int total_miss = 0;
     int percent = 0; // 0..100
-    auto cache = BaselineCache([&](Request req) {
+    auto cache = MassiveCache([&](Request req) {
         debug("@%lld: Finish request: request.id: %lld success_request: %lld", current_tick, req.id, success_request);
         success_request++;
+#ifndef DEBUG
         if (success_request >= total_request * percent / 100) {
             if (percent % 10 == 0) {
                 cout << percent << "%";
@@ -83,6 +83,7 @@ int main(int argc, char** argv)
             cout.flush();
             percent += 2;
         }
+#endif
         auto delay = current_tick - req.tick;
         verbfile << delay << endl;
         total_delay += delay;
