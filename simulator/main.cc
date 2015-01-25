@@ -8,11 +8,6 @@
 
 using namespace std;
 
-void analyse(char* filename) {
-
-    exit(0);
-}
-
 int main(int argc, char** argv)
 {
     bool analysis = false;
