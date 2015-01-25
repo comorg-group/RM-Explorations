@@ -11,6 +11,9 @@ public:
     virtual void nextTick(Tick) = 0;
     virtual void requestCache(Request) = 0;
     virtual bool isAvailable() = 0;
+#ifdef STAT
+    virtual std::string getStateName() = 0;
+#endif
 protected:
     callback_type callback;
     static const Tick missPenalty = 100;

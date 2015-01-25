@@ -48,7 +48,7 @@ private:
     CacheStrip * strip[1<<STRIP_BIT];
     SMUEntry smu[1<<STRIP_BIT][1<<LINE_BIT][GROUPSIZE];
     void changeState(State, Tick);
-    static std::string stateToString(State);
+    std::string stateToString(State);
     
     static const int64_t microTickPerTick = 1;
     void nextState(Tick);
@@ -69,6 +69,7 @@ public:
     virtual void nextTick(Tick tick);
     virtual void requestCache(Request);
     virtual bool isAvailable();
+    virtual std::string getStateName();
 };
 
 #endif

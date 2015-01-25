@@ -235,3 +235,8 @@ void MassiveCache::changeState(State _state, Tick tick)
         cacheDesignNotification(text);
     }
 }
+
+std::string MassiveCache::getStateName()
+{
+    return stateToString(state);
+}

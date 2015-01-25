@@ -219,3 +219,7 @@ void BaselineCache::changeState(State _state, Tick tick)
         cacheDesignNotification(text);
     }
 }
+
+std::string BaselineCache::getStateName(){
+    return stateToString(state);
+}
