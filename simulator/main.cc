@@ -64,11 +64,23 @@ int main(int argc, char** argv)
     Tick current_tick = request_vector.front().tick;
     Tick total_delay = 0;
     Tick total_shift_time = 0;
-    int total_miss = 0;
     uint64_t success_request = 0;
+    int total_miss = 0;
+    int percent = 0; // 0..100
     auto cache = BaselineCache([&](Request req) {
         debug("@%lld: Finish request: request.id: %lld success_request: %lld", current_tick, req.id, success_request);
         success_request++;
+        if (success_request >= total_request * percent / 100) {
+            if (percent % 10 == 0) {
+                cout << percent << "%";
+                if (percent == 100)
+                    cout << endl;
+            } else {
+                cout << ".";
+            }
+            cout.flush();
+            percent += 2;
+        }
         auto delay = current_tick - req.tick;
         verbfile << delay << endl;
         total_delay += delay;
@@ -84,7 +96,6 @@ int main(int argc, char** argv)
             cache.requestCache(*it);
             it++;
         }
-
         current_tick++;
         cache.nextTick(current_tick);
     }
