@@ -54,17 +54,18 @@ int main(int argc, char** argv)
             address_visit_count[it->address]++;
         }
 
-        cout << "Total request: " << total_request << endl
-             << "Read percentage: " << (float)read_count / (float)total_request * 100 << "%" << endl
-             << "Write percentage: " << (float)write_count / (float)total_request * 100 << "%" << endl
-             << "Average interval: " << (float)total_interval / total_request << endl
-             << "Average requests per address: " << (float)total_request / address_visit_count.size() << endl;
+        cout << "Total request:                 " << total_request << endl
+             << "Read percentage:               " << (float)read_count / (float)total_request * 100 << "%" << endl
+             << "Write percentage:              " << (float)write_count / (float)total_request * 100 << "%" << endl
+             << "Average interval:              " << (float)total_interval / total_request << endl
+             << "Average requests per address:  " << (float)total_request / address_visit_count.size() << endl;
         return 0;
     }
 
     Tick current_tick = request_vector.front().tick;
     Tick total_delay = 0;
     Tick total_shift_time = 0;
+    Tick total_shift_time_in_read = 0;
     uint64_t success_request = 0;
     int total_miss = 0;
     int percent = 0; // 0..100
@@ -87,18 +88,25 @@ int main(int argc, char** argv)
         auto delay = current_tick - req.tick;
         verbfile << delay << endl;
         total_delay += delay;
+        total_shift_time += req.shiftTime;
         if (req.op == OpRead)
+<<<<<<< HEAD
             total_shift_time += req.shiftTime;
         if (req.shiftTime>5) {
             _LIBCPP_ASSERT(1, 1);
         }
+=======
+            total_shift_time_in_read += req.shiftTime;
+>>>>>>> d8c89f350449b309ce7a2f90918d25e3e6216995
         total_miss += req.isMissed;
     });
 
+    uint64_t total_issue_delay = 0;
     auto it = request_vector.begin();
     while (success_request < total_request) {
         if (cache.isAvailable() && it != request_vector.end() && it->tick + 6 <= current_tick) {
             debug("@%lld: Send request: request.id: %lld / %lld", current_tick, it->id, total_request);
+            total_issue_delay += current_tick - it->tick - 6;
             cache.requestCache(*it);
             it++;
         }
@@ -106,14 +114,16 @@ int main(int argc, char** argv)
         cache.nextTick(current_tick);
     }
 
-    cout << "Total request: " << total_request << endl
-         << "Total delay: " << total_delay << endl
-         << "Total shift (when read): " << total_shift_time << endl
-         << "Average delay: " << (float)total_delay / (float)total_request << endl
-         << "Average shift (when read): " << (float)total_shift_time / (float)read_count << endl
-         << "Miss rate: " << (float)total_miss / (float)total_request << endl
-         << "Read percentage: " << (float)read_count / (float)total_request << endl
-         << "Write percentage: " << (float)write_count / (float)total_request << endl;
+    cout << "Total request:                 " << total_request << endl
+         << "Total delay:                   " << total_delay << endl
+         << "Average delay:                 " << (float)total_delay / (float)total_request << endl
+         << "Average delay before issue:    " << (float)total_issue_delay / (float)total_request << endl
+         << "Average shift:                 " << (float)total_shift_time / (float)total_request << endl
+         << "Average shift (when read):     " << (float)total_shift_time_in_read / (float)read_count << endl
+         << "Miss rate:                     " << (float)total_miss / (float)total_request * 100 << "%" << endl
+         << "Read percentage:               " << (float)read_count / (float)total_request * 100 << "%" << endl
+         << "Write percentage:              " << (float)write_count / (float)total_request * 100 << "%" << endl
+         ;
 
     return 0;
 }
