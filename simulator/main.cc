@@ -89,6 +89,9 @@ int main(int argc, char** argv)
         total_delay += delay;
         if (req.op == OpRead)
             total_shift_time += req.shiftTime;
+        if (req.shiftTime>5) {
+            _LIBCPP_ASSERT(1, 1);
+        }
         total_miss += req.isMissed;
     });
 

@@ -235,3 +235,8 @@ void EagerCache::changeState(State _state, Tick tick)
         cacheDesignNotification(text);
     }
 }
+
+std::string EagerCache::getStateName()
+{
+    return stateToString(state);
+}
