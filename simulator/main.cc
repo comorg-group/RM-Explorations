@@ -90,14 +90,7 @@ int main(int argc, char** argv)
         total_delay += delay;
         total_shift_time += req.shiftTime;
         if (req.op == OpRead)
-<<<<<<< HEAD
-            total_shift_time += req.shiftTime;
-        if (req.shiftTime>5) {
-            _LIBCPP_ASSERT(1, 1);
-        }
-=======
             total_shift_time_in_read += req.shiftTime;
->>>>>>> d8c89f350449b309ce7a2f90918d25e3e6216995
         total_miss += req.isMissed;
     });
 
@@ -122,8 +115,7 @@ int main(int argc, char** argv)
          << "Average shift (when read):     " << (float)total_shift_time_in_read / (float)read_count << endl
          << "Miss rate:                     " << (float)total_miss / (float)total_request * 100 << "%" << endl
          << "Read percentage:               " << (float)read_count / (float)total_request * 100 << "%" << endl
-         << "Write percentage:              " << (float)write_count / (float)total_request * 100 << "%" << endl
-         ;
+         << "Write percentage:              " << (float)write_count / (float)total_request * 100 << "%" << endl;
 
     return 0;
 }

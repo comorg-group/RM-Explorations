@@ -135,16 +135,22 @@ void MassiveCache::nextState(Tick tick)
     }
     case StateReturning: {
         int count = 0;
+        int clean = true;
         for (int i = 0; i < (1 << STRIP_BIT); i++) {
             if (strip[i]->offset != 0) {
                 strip[i]->shift(strip[i]->toDir(0));
                 count++;
+                if (strip[i]->offset != 0) {
+                    clean = false;
+                }
                 if (count == 2) {
                     break;
                 }
             }
         }
-        changeState(StateIdle, tick);
+        if (clean) {
+            changeState(StateIdle, tick);
+        }
         break;
     }
     }
