@@ -6,6 +6,7 @@
 #include "BaseCache.hh"
 #include "BaselineCache.hh"
 #include "EagerCache.hh"
+#include "MassiveCache.hh"
 
 using namespace std;
 

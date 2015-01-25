@@ -11,7 +11,7 @@
 #define STRIP_BIT 10
 #define STRIP_MASK 0x7FE00
 #define TAG_BIT 13
-#define TAG_MASK 0xFFF800000
+#define TAG_MASK 0xFFF80000
 #define GROUP_BIT 3
 #define GROUPSIZE 8
 
