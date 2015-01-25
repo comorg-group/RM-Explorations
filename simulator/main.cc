@@ -90,14 +90,10 @@ int main(int argc, char** argv)
         total_delay += delay;
         total_shift_time += req.shiftTime;
         if (req.op == OpRead)
-<<<<<<< HEAD
-            total_shift_time += req.shiftTime;
+            total_shift_time_in_read += req.shiftTime;
         if (req.shiftTime>5) {
             _LIBCPP_ASSERT(1, 1);
         }
-=======
-            total_shift_time_in_read += req.shiftTime;
->>>>>>> d8c89f350449b309ce7a2f90918d25e3e6216995
         total_miss += req.isMissed;
     });
 

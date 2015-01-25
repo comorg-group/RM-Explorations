@@ -8,7 +8,7 @@ typedef uint64_t Addr;
 typedef uint64_t Tick;
 
 #define STAT
- #define DEBUG
+// #define DEBUG
 #ifndef DEBUG
 #define debug(...)
 #else
