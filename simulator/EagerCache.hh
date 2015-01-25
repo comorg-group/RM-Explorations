@@ -51,7 +51,7 @@ private:
     void changeState(State, Tick);
     static std::string stateToString(State);
     
-    static const int64_t microTickPerTick = 2;
+    static const int64_t microTickPerTick = 1;
     void nextState(Tick);
     int64_t stateLength(State);
 public:

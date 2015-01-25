@@ -48,7 +48,7 @@ void EagerCache::nextState(Tick tick)
         strip[targetStrip]->readDir(targetAddr);
         smu[targetStrip][targetGroup][targetGroupOffset].lastAccessTick = tick;
         callback(targetRequest);
-        changeState(StateIdle, tick);
+        changeState(StateReturning, tick);
         break;
     }
     case StateWriting: {
@@ -56,7 +56,7 @@ void EagerCache::nextState(Tick tick)
         smu[targetStrip][targetGroup][targetGroupOffset].lastAccessTick = tick;
         SMUEntry newEntry = { tick, targetTag, true };
         smu[targetStrip][targetGroup][targetGroupOffset] = newEntry;
-        changeState(StateIdle, tick);
+        changeState(StateReturning, tick);
         break;
     }
     case StateLookup: {
@@ -133,9 +133,20 @@ void EagerCache::nextState(Tick tick)
         }
         break;
     }
-    default:
-        cacheDesignError("State not implemented!");
+    case StateReturning: {
+        int count = 0;
+        for (int i = 0; i < (1 << STRIP_BIT); i++) {
+            if (strip[i]->offset != 0) {
+                strip[i]->shift(strip[i]->toDir(0));
+                count++;
+                if (count == 2) {
+                    break;
+                }
+            }
+        }
+        changeState(StateIdle, tick);
         break;
+    }
     }
 }
 
@@ -154,6 +165,8 @@ int64_t EagerCache::stateLength(State state)
         return 1;
     case StateWriting:
         return 1;
+    case StateReturning:
+        return 1;
     }
 }
 
@@ -167,7 +180,7 @@ void EagerCache::nextTick(Tick tick)
 
 void EagerCache::requestCache(Request request)
 {
-    if (state != StateIdle) {
+    if (state != StateIdle and state != StateReturning) {
         cacheDesignError("new request come while cache is still working!!!");
     }
     else {
@@ -183,7 +196,7 @@ void EagerCache::requestCache(Request request)
 
 bool EagerCache::isAvailable()
 {
-    return (state == StateIdle);
+    return (state == StateIdle or state == StateReturning);
 }
 
 std::string EagerCache::stateToString(State _state)
@@ -206,6 +219,9 @@ std::string EagerCache::stateToString(State _state)
         break;
     case StateMiss:
         return "StateMiss";
+        break;
+    case StateReturning:
+        return "StateReturning";
         break;
     }
 }
