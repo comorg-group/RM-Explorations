@@ -24,11 +24,18 @@ Figure 1 showed a basic structure of a racetrack strip, which consist of a nano 
 #### Design of simulator
 
 //TODO: Add figure 2
+
 Our simulator exactly mimic the CPU cache interaction. Our simulator is composed of two parts as depicted in Figure 2. The part on the left is the main simulation sequence control logic in `main` function, which send the request recorded in trace file in the exact same order and time. The part on the right is the cache module, which have different implementation for different cache. All cache module inherit a base class called as `BaseCache`.
 
 #### Design of cache
 
-//TODO: liudangyi
+//TODO: add figure
+
+We adopted a common design of hybird cache (consist of both SRAM and racetrack memory) (figure 3). A cache is composed of 3 parts: SMU(strap mapping unit), Racetrack memory(for actual storage) and Control unit. 
+
+* SMU is mainly consist of a small piece of SRAM comparing to the much larger capacity of racetrack memory. SMU is incharge of recording the tag bits of each cache line and provide a random access interface of determine the availibity and the location on racetrack strips of a specific memory address.
+* Racetrack memory is the main storage device for cache, it storage all the data of the address cached.
+* Control unit is incharge of memory access, racetrack shift and read or write action performed on strips. Our control unit is designed to work like a multi cycle computing device. The control unit has a faster clock than the main clock.
 
 ### Implementation
 
