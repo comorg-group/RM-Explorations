@@ -57,7 +57,7 @@ private:
 public:
     MassiveCache(callback_type callback):BaseCache(callback){
         for (int i=0 ; i<(1<<STRIP_BIT); i++) {
-            strip[i]= new CacheStrip({2,6,10,14,18,22,26,30,34,38,42,46,50,54,58,62}, {1,63});
+            strip[i]= new CacheStrip({2,6,10,14,18,22,26,30,34,38,42,46,50,54,58,62}, {2,62});
         }
         for (int i=0; i<(1<<STRIP_BIT); i++) {
             for (int j=0; j<(1<<LINE_BIT); j++) {

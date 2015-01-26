@@ -7,6 +7,7 @@
 #include "BaselineCache.hh"
 #include "EagerCache.hh"
 #include "MassiveCache.hh"
+#include "SetCrossGroupCache.hh"
 
 using namespace std;
 
